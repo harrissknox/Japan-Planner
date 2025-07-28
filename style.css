@@ -1,0 +1,522 @@
+/*
+  Base styles for the Japan Trip Planner web application.
+  The goal is to keep the design light and modern while making the
+  calendar, lists and forms easy to read. Feel free to customise
+  colours and spacing to taste – the CSS variables at the top make
+  that straightforward.
+*/
+
+/* Colour palette variables.  These can be changed globally to
+   experiment with different colour schemes. */
+:root {
+  /* Updated pastel colour palette inspired by anime aesthetics */
+  --primary-color: #ff6b81;     /* soft rosy pink for buttons and accents */
+  --secondary-color: #a29bfe;   /* lavender for secondary highlights */
+  --accent-color: #ffeaa7;      /* pale yellow accent */
+  --background-color: #fdf4f8;  /* very light pink background */
+  --text-color: #2d3436;
+  --border-radius: 6px;
+  --light-border: #ddd;
+  --nav-background: #ffffff;
+  --nav-active: #fdecef;        /* light blush for active nav items */
+  --header-background: #fef7fb; /* very light pink for table headers */
+  --event-tag-radius: 4px;
+  --event-tag-padding: 2px 4px;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Hero banner image at the top of the page.  We use a fixed height and
+   cover scaling to ensure the artwork fills the width while preserving
+   its aspect ratio. */
+.hero img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Navigation bar along the top to switch between couples and shared view */
+.nav-bar {
+  display: flex;
+  background-color: var(--nav-background);
+  border-bottom: 1px solid var(--light-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-button {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.nav-button:hover {
+  background-color: var(--nav-active);
+}
+
+.nav-button.active {
+  background-color: var(--nav-active);
+  font-weight: 600;
+}
+
+.container {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Section headings */
+h2 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+/* Calendar styles */
+.calendar {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.calendar-header button {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.calendar-header button:hover {
+  background-color: darken(var(--primary-color), 10%);
+}
+
+.calendar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.calendar-table th,
+.calendar-table td {
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--light-border);
+  width: 14.285%;
+  min-height: 80px;
+  position: relative;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.calendar-table th {
+  background-color: var(--header-background);
+  font-weight: 600;
+  text-align: center;
+}
+
+.date-number {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.other-month {
+  color: #b2bec3;
+}
+
+.events {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.event-tag {
+  /* Event tags display each itinerary entry within the calendar.  We
+     switched to a flex container so that a small icon can sit next
+     to the time/title.  The padding and border radius remain the
+     same while we allow content to wrap if needed. */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--event-tag-padding);
+  border-radius: var(--event-tag-radius);
+  font-size: 0.7rem;
+  line-height: 1;
+  color: #fff;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Small icon inside calendar event tags */
+.event-tag img {
+  width: 14px;
+  height: 14px;
+}
+
+/* List view styles */
+.list-view {
+  padding: 0.5rem 0;
+}
+
+.list-day {
+  margin-bottom: 1rem;
+}
+
+.list-day h4 {
+  margin: 0;
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--light-border);
+  padding-bottom: 0.25rem;
+}
+
+.list-item {
+  list-style: none;
+  margin: 0.25rem 0;
+  padding: 0.5rem;
+  border-left: 4px solid transparent;
+  background-color: #fff;
+  border: 1px solid var(--light-border);
+  border-radius: var(--border-radius);
+}
+
+.list-item .item-title {
+  font-weight: 600;
+}
+
+.list-item .item-type {
+  font-size: 0.8rem;
+  color: #636e72;
+  margin-left: 4px;
+}
+
+/* Icon used in list view before the event title.  Keeping it small
+   ensures the list remains tidy. */
+.list-item .list-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* Time prefix for list items */
+.list-item .item-time {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.list-item .item-cost {
+  font-size: 0.8rem;
+  color: #d63031;
+  margin-left: 8px;
+}
+
+/* Indicator for events that have already been paid for.  Displayed
+   alongside the event title in list view.  The green colour ties
+   into the palette and suggests completion. */
+.list-item .item-paid {
+  font-size: 0.8rem;
+  color: #00b894;
+  margin-left: 8px;
+  font-style: italic;
+}
+
+/* Shared overlaps section on the shared tab.  Lists activities that
+   appear in multiple couples' itineraries so the group can plan
+   together. */
+.overlap-section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #fff;
+  border: 1px solid var(--light-border);
+  border-radius: var(--border-radius);
+}
+.overlap-section h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+.overlap-item {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-left: 4px solid var(--secondary-color);
+  background-color: #fdf7fc;
+  border-radius: var(--border-radius);
+}
+.overlap-item:last-child {
+  margin-bottom: 0;
+}
+.overlap-item-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.overlap-item-details {
+  font-size: 0.85rem;
+  color: #636e72;
+}
+
+/* Forms */
+.form-section {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: #fff;
+  border: 1px solid var(--light-border);
+  border-radius: var(--border-radius);
+}
+
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.form-group label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  flex: 1;
+  min-width: 120px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.4rem;
+  border: 1px solid var(--light-border);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-actions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.form-actions button:hover {
+  background-color: #1e649a;
+}
+
+/* Packing list */
+.packing-list {
+  margin-top: 1rem;
+}
+
+.packing-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.packing-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+.packing-item span {
+  cursor: pointer;
+}
+
+.packing-item span.checked {
+  text-decoration: line-through;
+  color: #636e72;
+}
+
+.packing-input {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.packing-input input {
+  flex: 1;
+  padding: 0.4rem;
+  border: 1px solid var(--light-border);
+  border-radius: var(--border-radius);
+}
+
+.packing-input button {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.packing-input button:hover {
+  background-color: #1e649a;
+}
+
+/* Generic delete button used throughout the app (events, list items,
+   packing and pre‑trip tasks).  A small × appears to the right of
+   text; it becomes red on hover to indicate removal. */
+.delete-btn {
+  /* Display flex so the clickable area is larger than the glyph.
+     A small square ensures the user can easily tap or click the ×. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  color: inherit;
+  margin-left: 4px;
+}
+.delete-btn:hover {
+  color: #d63031;
+}
+
+/* Pre‑trip checklist styles.  Mimic the packing list layout but
+   accommodate an optional due date and delete button. */
+.pretrip-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.pretrip-input input[type="text"] {
+  flex: 2;
+  padding: 0.4rem;
+  border: 1px solid var(--light-border);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+.pretrip-input input[type="date"] {
+  flex: 1;
+  padding: 0.4rem;
+  border: 1px solid var(--light-border);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+.pretrip-input button {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  flex: 0 0 auto;
+  transition: background-color 0.2s;
+}
+.pretrip-input button:hover {
+  background-color: #1e649a;
+}
+.pretrip-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.pretrip-item span.checked {
+  text-decoration: line-through;
+  color: #636e72;
+}
+.task-date {
+  font-size: 0.8rem;
+  color: #636e72;
+  margin-left: 4px;
+}
+
+/* Error banner to display Firebase or network issues */
+.error-banner {
+  background-color: #ffcccc;
+  color: #b00020;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #b00020;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  display: none;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 600px) {
+  .nav-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .nav-bar .nav-item {
+    margin: 0.25rem 0;
+    padding: 0.5rem;
+    text-align: center;
+  }
+  .calendar-table {
+    font-size: 0.8rem;
+  }
+  .calendar-table th,
+  .calendar-table td {
+    padding: 0.3rem 0.2rem;
+  }
+  .form-group label {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .form-group label input,
+  .form-group label select {
+    width: 100%;
+  }
+  .packing-list .packing-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .pretrip-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
