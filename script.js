@@ -119,34 +119,38 @@ try {
  * serialisation of nested objects and arrays automatically.
  */
 function saveToFirestore() {
+  // If Firestore isn't initialised, reject so the caller can
+  // surface the error. We never fallback to localStorage in
+  // production deployments.
   if (!db) {
-    // Reject if Firestore is unavailable.  Callers can choose to
-    // handle this and remove local changes accordingly.
     return Promise.reject(new Error('Firestore not available'));
   }
-  // When saving to Firestore, include a `lastUpdated` field with
-  // the current time.  Also update the in-memory localUpdateTime so
-  // that subsequent snapshots can be compared.  Firestore stores
-  // numbers as doubles, which suffices for millisecond timestamps.
+
+  // Capture the current time and update our local marker. This
+  // timestamp will be stored alongside the planner data and used to
+  // avoid applying stale snapshots.
   const now = Date.now();
   localUpdateTime = now;
-  const payload = { couples, lastUpdated: now };
-  // Write the planner document and then read it back to verify that
-  // the write succeeded.  If the verification fails, reject the
-  // promise so callers can handle the error.
-  const docRef = db.collection('planner').doc('main');
-  return docRef.set(payload).then(() => {
-    return docRef.get().then(snap => {
-      const data = snap.exists ? snap.data() : null;
-      // If the document is missing or the lastUpdated timestamp does not
-      // match our localUpdateTime, treat this as a failure.  This
-      // double-checks that our write reached the server and is
-      // readable from the client.
-      if (!data || data.lastUpdated !== now) {
-        throw new Error('Write verification failed');
-      }
-    });
-  });
+
+  // Deep clone the couples array before writing. Firestore can
+  // serialise plain objects and arrays, but we avoid writing any
+  // prototype or DOM references that may have been attached.
+  const cleanCouples = couples.map(c => ({
+    id: c.id,
+    name: c.name,
+    events: c.events.slice(),
+    packingList: c.packingList.slice(),
+    preTripList: c.preTripList.slice()
+  }));
+
+  const payload = { couples: cleanCouples, lastUpdated: now };
+
+  // Write the planner document. We deliberately avoid the
+  // verification read here because Firestore will reject writes
+  // that fail due to security rules or network issues. Rely on the
+  // returned promise: if it resolves, the write was acknowledged by
+  // the backend; if it rejects, we surface the error to the caller.
+  return db.collection('planner').doc('main').set(payload);
 }
 
 /**
