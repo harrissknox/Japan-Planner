@@ -54,7 +54,7 @@ const firebaseConfig = {
   // Use the canonical appspot.com bucket.  The previous
   // firebasestorage.app domain was incorrect and may prevent
   // initialisation.
-  storageBucket: "japan-trip-planner-14298.firebasestorage.app",
+  storageBucket: "japan-trip-planner-14298.appspot.com",
   messagingSenderId: "417800233433",
   appId: "1:417800233433:web:0d8aabb780fe0e443bf9c8"
 };
